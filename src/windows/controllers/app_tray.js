@@ -54,6 +54,7 @@ class AppTray {
     if (process.platform === 'linux' || process.platform === 'win32') {
       const contextMenu = Menu.buildFromTemplate([
         { label: 'Show', click: () => this.hideSplashAndShowWeChat() },
+        { label: 'Reload', click: () => this.reloadWeChat() },
         { label: 'Exit', click: () => app.exit(0) },
       ]);
       this.tray.setContextMenu(contextMenu);
@@ -67,7 +68,15 @@ class AppTray {
 
   hideSplashAndShowWeChat() {
     if (this.splashWindow.isShown) return;
-    this.wechatWindow.show();
+    if (this.wechatWindow.isShown)
+      this.wechatWindow.hide();
+    else
+      this.wechatWindow.show();
+  }
+
+  reloadWeChat() {
+    app.relaunch();
+    app.exit();
   }
 
   refreshIcon() {
